@@ -13,7 +13,7 @@ import java.util.Scanner;
  * Overrides
  * 
  */
-// comentario
+
 
 public class LivrariaVirtual_Solutis {
 

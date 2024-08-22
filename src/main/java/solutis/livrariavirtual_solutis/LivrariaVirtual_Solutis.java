@@ -13,7 +13,8 @@ import java.util.Scanner;
  * Overrides
  * 
  */
-// comentario
+
+
 public class LivrariaVirtual_Solutis {
 
     public static void main(String[] args) {
@@ -29,6 +30,8 @@ public class LivrariaVirtual_Solutis {
                            4 - Listar Vendas
                            5 - Encerrar Programa                        
                            """);
+
+
         int resposta = scan.nextInt();
         
         switch (resposta) {

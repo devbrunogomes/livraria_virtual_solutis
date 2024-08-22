@@ -5,6 +5,7 @@ package solutis.livrariavirtual_solutis;
 public class Venda {
 
     //Atributos
+    private Livro[] livros;
     private int numVendas;
     private int numero;
     private String cliente;

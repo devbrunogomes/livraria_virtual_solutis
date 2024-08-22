@@ -6,6 +6,7 @@ public class LivrariaVirtual {
     private final int MAX_IMPRESSOS = 10;
     private final int MAX_ELETRONICOS = 20;
     private final int MAX_VENDAS = 50;
+    private Livro[] livros;
     private int numImpressos;
     private int numEletronicos;
     private int numVendas;

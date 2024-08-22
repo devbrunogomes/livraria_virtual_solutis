@@ -1,7 +1,11 @@
 
 package solutis.livrariavirtual_solutis;
 
+import java.util.Scanner;
+
 public class LivrariaVirtual {
+    Scanner scan = new Scanner(System.in);
+    
     //Atributos
     private final int MAX_IMPRESSOS = 10;
     private final int MAX_ELETRONICOS = 20;
@@ -58,7 +62,25 @@ public class LivrariaVirtual {
     
     //Métodos
     public void cadastrarLivro(){
-        System.out.println("Processo de cadastro");
+        System.out.println("""
+                           Processo de Cadasstro
+                           1 - Livro Impresso
+                           2 - Livro Eletronico
+                           3 - Ambos
+                           """);
+        int resposta = scan.nextInt();
+        switch (resposta) {
+            case 1:
+                //To do: Chamar funcão externa para cadastrar livro impresso
+                break;
+            default:
+                throw new AssertionError();
+        }
+        
+    }
+    
+    public void cadastrarLivroImpresso() {
+        //to do: Inserir logica
     }
     
     public void realizarVenda(){

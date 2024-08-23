@@ -1,6 +1,7 @@
 
 package solutis.livrariavirtual_solutis;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LivrariaVirtual {
@@ -89,6 +90,39 @@ public class LivrariaVirtual {
     
     public void realizarVenda(){
         System.out.println("Processo de Venda");
+        
+        //inputs cliente
+        System.out.print("Insira o nome do Cliente: ");
+        String nomeCliente = scan.nextLine();
+        System.out.print("Quantos livros serão comprados? ");       
+        int qntdLivrosVenda = scan.nextInt();
+        
+        //Incialização do Array de livros
+        ArrayList<Livro> livrosASeremVendidos = new ArrayList<>();
+        
+        //loop até a qntd especificada pelo cliente
+        for (int i = 0; i < qntdLivrosVenda; i++) {
+            System.out.println("Qual o tipo do livro " + (i + 1) + "?");
+            System.out.println("""
+                               1 - Livro Impresso
+                               2 - Livro Eletronico                               
+                               """);
+            int resposta = scan.nextInt();
+            switch (resposta) {
+                case 1:
+                    listarLivrosImpressos();
+                    break;
+                case 2: 
+                    listarLivrosEletronicos();
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            
+        }
+
+
+        //livrosASeremVendidos.add(new LivroImpresso()) ;
     }
     
     public void listarLivrosImpressos(){

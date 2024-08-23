@@ -7,16 +7,14 @@ public class Venda {
     ArrayList<Livro> livrosASeremVendidos = new ArrayList<>();
 
     //Atributos
-    private int numVendas;
+    private static int numVendas;
     private int numero;
     private String cliente;
     private float valor;
 
     //Construtores
-    public Venda(int numVendas, int numero, String cliente) {
-        this.numVendas = numVendas;
-        this.numero = numero;
-        this.cliente = cliente;
+    public Venda(String cliente) {
+        this.cliente = cliente;        
     }
 
     public Venda() {

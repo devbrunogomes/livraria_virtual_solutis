@@ -161,26 +161,21 @@ public class LivrariaVirtual {
     }
     
     public void realizarVenda() {
-        //Simulando array de livros impressos na biblioteca SÓ PRA TESTES
-        ArrayList<Livro> livrosImpressosDisponiveis = new ArrayList<>();
-        livrosImpressosDisponiveis.add(new LivroImpresso());
-        livrosImpressosDisponiveis.add(new LivroImpresso());
-        livrosImpressosDisponiveis.add(new LivroImpresso());
-        livrosImpressosDisponiveis.add(new LivroImpresso());
+        if (numVendas >= MAX_VENDAS) {
+            System.out.println("Limite de Vendas atingido!");
+            return;
+        }
         
         System.out.println("Processo de Venda");
 
         //inputs cliente
         System.out.print("Insira o nome do Cliente: ");
-        String nomeCliente = scan.nextLine();
+        String nomeCliente = scan.next();
         System.out.print("Quantos livros serão comprados? ");
         int qntdLivrosVenda = scan.nextInt();
 
         //Nova instancia de venda
-        Venda vendaAtual = new Venda(nomeCliente); //Nova instancia da venda atual
-
-        //Incialização do Array de livros
-        ArrayList<Livro> livrosASeremVendidos = new ArrayList<>();
+        Venda vendaAtual = new Venda(nomeCliente); //Nova instancia da venda atual        
 
         //loop até a qntd especificada pelo cliente
         for (int i = 0; i < qntdLivrosVenda; i++) {
@@ -190,37 +185,44 @@ public class LivrariaVirtual {
                                2 - Livro Eletronico                               
                                """);
             int resposta = scan.nextInt();
+            
+            int posicaoLivroASerVendido; //Guarda o valor do index no array
             switch (resposta) {
                 case 1:
-                    //Simulando a funcao de listar livros Impressos:
-                    for (int j = 0; j < livrosImpressosDisponiveis.size(); j++) {
-                        System.out.println("Livro [" + (j + 1) + "]\n" + livrosImpressosDisponiveis.get(j));
-                        System.out.println("");
-                    }
+                    //Chamada do metodo para listar livros impressos
+                    listarLivrosImpressos();
 
                     //Usuario escolhe qual livro da lista vai ser vendido
                     System.out.print("Qual dos livros sera vendido? ");
-                    int posicaoLivroASerVendido = scan.nextInt();
+                    posicaoLivroASerVendido = scan.nextInt();
 
                     //adiciona o livro no array de venda
-                    livrosASeremVendidos.add(livrosImpressosDisponiveis.get(posicaoLivroASerVendido - 1));
-                    
+                    //System.out.println(livrosCadastrados.get(posicaoLivroASerVendido-1));
+                    Livro livroPreMetodo = livrosCadastrados.get(posicaoLivroASerVendido-1);
+                    vendaAtual.addLivro(livroPreMetodo, i);
                     break;
                 case 2:
+                    //Chamada do metodo para listar livros eletronicos
                     listarLivrosEletronicos();
+
+                    //Usuario escolhe qual livro da lista vai ser vendido
+                    System.out.print("Qual dos livros sera vendido? ");
+                    posicaoLivroASerVendido = scan.nextInt();
+
+                    //adiciona o livro no array de venda
+                    vendaAtual.addLivro(livrosCadastrados.get(posicaoLivroASerVendido - 1), i);
                     break;
                 default:
                     throw new AssertionError();
             }
             
         }
-        
+        //Exibir os livros no carrinho
         vendaAtual.listarLivros();
         
-        float totalVenda = vendaAtual.getValor();
-        System.out.println("Total da venda: R$" + totalVenda);
-        
-        System.out.println("Confirmar a Venda? ");
+        //Processo de confirmacao de Venda
+        System.out.println("\nTotal da venda: R$" + vendaAtual.getValor());        
+        System.out.println("\nConfirmar a Venda? ");
         System.out.println("""
                                1 - Confirmar                               
                                2 - Cancelar
@@ -231,12 +233,17 @@ public class LivrariaVirtual {
         switch (respostaConfimarVenda) {
             case 1:
                 System.out.println("VENDA REALIZADA ");
+                //Incluir venda no Array
+                vendasRealizadas.add(numVendas,vendaAtual);
+                
                 //Incrementar numero de venda
                 this.numVendas++;                
                 vendaAtual.setNumero(this.getNumVendas());
+                
                 break;
             
             case 2:
+                //Retornar ao Menu Principal se a venda for cancelada
                 vendaAtual.setValor(0);
                 System.out.println("VENDA CANCELADA ");
                 break;
@@ -248,35 +255,38 @@ public class LivrariaVirtual {
     
     public void listarLivrosImpressos() {
         //TO DO - Ajustar para correta exibicao
-
-        for (Livro livro : livrosCadastrados) {
-            if (livro instanceof LivroImpresso) {
-                System.out.println(livro);
+        for (int i = 0; i < livrosCadastrados.size(); i++) {
+            if (livrosCadastrados.get(i) instanceof LivroImpresso) {
+                System.out.println("Livro [" + (i + 1) + "]\n");
+                System.out.println(livrosCadastrados.get(i) + "\n");
             }
         }
+        
     }
     
     public void listarLivrosEletronicos() {
         //TO DO - Ajustar para correta exibicao
 
-        for (Livro livro : livrosCadastrados) {
-            if (livro instanceof LivroEletronico) {
-                System.out.println(livro);
+        for (int i = 0; i < livrosCadastrados.size(); i++) {
+            if (livrosCadastrados.get(i) instanceof LivroEletronico) {
+                System.out.println("Livro [" + (i + 1) + "]\n");
+                System.out.println(livrosCadastrados.get(i) + "\n");
             }
-            
         }
     }
     
     public void listarLivros() {
-        System.out.println("3 - listar Livros");
-        System.out.println("-------------------");
         System.out.println("""
+                           "3 - listar Livros"
+                           "-------------------"
                            1 - Listar Livros Impressos
                            2 - Listar Livros Eletronicos
                            3 - Listar Ambos
-                           4 - Retornar pro Menu Principal
+                           4 - Retornar pro Menu Principal                           
                            """);
         int respostaListarLivros = scan.nextInt();
+        
+        //Usuario escolhe qual o tipo de lista
         switch (respostaListarLivros) {
             case 1:
                 listarLivrosImpressos();
@@ -298,9 +308,11 @@ public class LivrariaVirtual {
     }
     
     public void listarVendas() {
-        for (Venda vendaRealizada : vendasRealizadas) {
-            System.out.println(vendaRealizada);
-        }
+        for (int i = 0; i < vendasRealizadas.size(); i++) {
+            System.out.println("Venda " + vendasRealizadas.get(i).getNumero());
+            System.out.println(vendasRealizadas.get(i));
+            System.out.println("");
+        }        
     }
     
 }

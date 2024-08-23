@@ -10,13 +10,7 @@ import java.util.Scanner;
  */
 
 /** TO DO
-* Listar Livros Impressos
-* Listar Livros Eletronicos
-* Listar Vendas
-* Em realizar Vendas, iterar sobre o array criado de livros
-* Em realizar Vendas, incluir a venda de livros eletronicos
 * Em cadastro de Livro, atualizar o estoque
-* Rever o atributo estático de contagem de vendas
 * Sobreescrever metodos toString das classes
 */
 public class Application {
@@ -32,6 +26,7 @@ public class Application {
             //Programa irá se repetir, até o usuario escolher o 5
             
             System.out.println("""
+                               
                            ---- Livraria SQUAD 1 ----
                                == MENU PRINCIPAL ==
                            1 - Cadastro de Livro

@@ -57,13 +57,13 @@ public class Venda {
     //Metodos
     public void addLivro(Livro livro, int index) {
         System.out.println("Adicionando livro ao carrinho");
-        livrosASeremVendidos.add(livro);
+        livrosASeremVendidos.add(index,livro);
     }
 
     public void listarLivros() {
         float valorTotal = 0;
 
-        System.out.println("-- Livros no Carrinho --");
+        System.out.println("\n-- Livros no Carrinho --");
 
         //Loop For
         for (Livro livroASerVendido : livrosASeremVendidos) {

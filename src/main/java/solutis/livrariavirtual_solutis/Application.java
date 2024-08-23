@@ -22,7 +22,7 @@ public class Application {
         
         LivrariaVirtual livrariaTeste = new LivrariaVirtual();
         LivroEletronico livroTeste = new LivroEletronico();
-        
+
         System.out.println("""
                            1 - Cadastro de Livro
                            2 - Realizar Venda
@@ -41,6 +41,8 @@ public class Application {
             case 2:
                 livrariaTeste.realizarVenda();
                 break;
+            case 3:
+                livrariaTeste.listarLivros();
             default:
                 throw new AssertionError();
         }

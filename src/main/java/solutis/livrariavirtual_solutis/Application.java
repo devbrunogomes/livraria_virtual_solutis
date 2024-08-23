@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 
 
-public class LivrariaVirtual_Solutis {
+public class Application {
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
@@ -37,6 +37,9 @@ public class LivrariaVirtual_Solutis {
         switch (resposta) {
             case 1:
                 livrariaTeste.cadastrarLivro();
+                break;
+            case 2:
+                livrariaTeste.realizarVenda();
                 break;
             default:
                 throw new AssertionError();

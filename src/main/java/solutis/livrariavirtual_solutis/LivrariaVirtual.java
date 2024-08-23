@@ -83,8 +83,12 @@ public class LivrariaVirtual {
         //to do: Inserir logica
     }
     
-    public void realizarVenda(){
+    public void cadastrarLivroEletronico(){
         
+    }
+    
+    public void realizarVenda(){
+        System.out.println("Processo de Venda");
     }
     
     public void listarLivrosImpressos(){

@@ -169,7 +169,72 @@ public class LivrariaVirtual {
     }
     
     public void realizarVenda(){
+        //Simulando array de livros impressos na biblioteca SÓ PRA TESTES
+        ArrayList<Livro> livrosImpressosDisponiveis = new ArrayList<>();
+        livrosImpressosDisponiveis.add(new LivroImpresso());
+        livrosImpressosDisponiveis.add(new LivroImpresso());
+        livrosImpressosDisponiveis.add(new LivroImpresso());
+        livrosImpressosDisponiveis.add(new LivroImpresso());
+        
         System.out.println("Processo de Venda");
+        
+        //inputs cliente
+        System.out.print("Insira o nome do Cliente: ");
+        String nomeCliente = scan.nextLine();
+        System.out.print("Quantos livros serão comprados? ");       
+        int qntdLivrosVenda = scan.nextInt();
+        
+        //Incialização do Array de livros
+        ArrayList<Livro> livrosASeremVendidos = new ArrayList<>();
+        
+        //loop até a qntd especificada pelo cliente
+        for (int i = 0; i < qntdLivrosVenda; i++) {
+            System.out.println("Qual o tipo do livro " + (i + 1) + "?");
+            System.out.println("""
+                               1 - Livro Impresso
+                               2 - Livro Eletronico                               
+                               """);
+            int resposta = scan.nextInt();
+            switch (resposta) {
+                case 1:
+                    //Simulando a funcao de listar livros Impressos:
+                    for (int j = 0; j < livrosImpressosDisponiveis.size(); j++) {
+                        System.out.println("Livro [" + (j+1) + "]\n" +livrosImpressosDisponiveis.get(j));
+                        System.out.println("");
+                    }
+                    
+                    //Usuario escolhe qual livro da lista vai ser vendido
+                    System.out.print("Qual dos livros sera vendido? ");
+                    int posicaoLivroASerVendido = scan.nextInt();
+                    
+                    //adiciona o livro no array de venda
+                    livrosASeremVendidos.add(livrosImpressosDisponiveis.get(posicaoLivroASerVendido - 1));
+                    
+                    break;
+                case 2: 
+                    listarLivrosEletronicos();
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            
+        }
+        
+        System.out.println("VENDA REALIZADA ");
+        float totalVenda = 0;
+        for (Livro livroASerVendido : livrosASeremVendidos) {
+            System.out.println("Titulo - " + livroASerVendido.titulo);
+            System.out.println("Preco - " + livroASerVendido.getPreco());
+            totalVenda += (float)livroASerVendido.getPreco();
+        }
+        
+        System.out.println("Total da venda: R$" + totalVenda);
+        
+        //Simulando um novo array de vendas
+        ArrayList<Venda> vendasRealizadas = new ArrayList<>();
+        vendasRealizadas.add(new Venda(numVendas, numVendas, nomeCliente, totalVenda));
+        this.numVendas++;
+
     }
     
     public void listarLivrosImpressos(){

@@ -47,6 +47,7 @@ public abstract class Livro {
         this.editora = editora;
     }
 
+     //não seria  mais  interessante a  classBigDecimal q  lida com valores??
     public float getPreco() {
         return preco;
     }

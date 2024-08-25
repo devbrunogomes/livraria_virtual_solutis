@@ -1,6 +1,6 @@
 package solutis.livrariavirtual_solutis;
 
-import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /**
  * Estrutura das classes
@@ -16,46 +16,34 @@ import java.util.Scanner;
 public class Application {
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
 
         LivrariaVirtual livrariaTeste = new LivrariaVirtual();
 
-        int escolhaUsuario = 0;
+        String[] opcoes = {"Cadastrar livro", "Realizar uma venda", "Listar livros", "Listar vendas", "Sair"};
+        int escolhaUsuario;
 
         do {
-            //Programa irá se repetir, até o usuario escolher o 5
-            
-            System.out.println("""
-                               
-                           ---- Livraria SQUAD 1 ----
-                               == MENU PRINCIPAL ==
-                           1 - Cadastro de Livro
-                           2 - Realizar Venda
-                           3 - Listar Livros
-                           4 - Listar Vendas
-                           5 - Encerrar Programa                        
-                           """);
-            escolhaUsuario = scan.nextInt();
-            
+           escolhaUsuario = JOptionPane.showOptionDialog(null, "Escolha uma opção", "Menu Livraria Virtual", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+         
             switch (escolhaUsuario) {
-                case 1:
+                case 0:
                     livrariaTeste.cadastrarLivro();
                     break;
-                case 2:
+                case 1:
                     livrariaTeste.realizarVenda();
                     break;
-                case 3:
+                case 2:
                     livrariaTeste.listarLivros();
                     break;
-                case 4:
+                case 3:
                     livrariaTeste.listarVendas();
                     break;
-                case 5:
-                    System.out.println("Encerrando Programa!");
+                case 4:
+                    JOptionPane.showMessageDialog(null, "Saindo do programa...");
                     break;
                 default:
-                    throw new AssertionError();
+                    JOptionPane.showMessageDialog(null, "Opção inválida.");
             }
-        } while (escolhaUsuario != 5);
+        } while (escolhaUsuario != 4);
     }
 }

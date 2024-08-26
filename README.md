@@ -30,6 +30,8 @@ Ações referente à vendas: VendaDao.java
 
 **Para mais detalhes veja a documentação do projeto, neste mesmo repositório.**
 
+Trello do projeto: https://trello.com/b/yxndKLPi
+
 ---
 
 ### 1 - Danielle Sanches
@@ -40,11 +42,14 @@ Minha participação no projeto de livraria virtual envolveu a criação e estru
 
 ### 2 - Bruno Gomes
 
-Achei muito desafiador o projeto, principalmente pelo fato dele não estar atrelado à uma maquina só, então
-se fez necessário muita comunicação por parte da equipe, e uso eficiente do git. 
+Achei este projeto muito desafiador, principalmente pelo fato dele não estar atrelado à uma maquina só, então
+se fez necessário muita comunicação por parte da equipe, e uso eficiente do git. E pra isso, estive a frente das
+reuniões, auxiliando no uso do Git, para evitar grande conflitos na hora do merge e alocando cada um em diferentes Tasks 
+juntamente com meus colegas. Também tivemos a oportunidade de usar o Trello para "quebrar" as Tasks maiores em pequenas Tasks, 
+visando a colaboração de todos no projeto.
 
-Além disso, a integração com Banco de Dados foi um pequeno gigante vencido, pois uma vez utilizado, muitas lógicas 
-precisam ser modificadas, gerando um trabalho minucioso de pequenos ajustes,
+Além disso, a integração com o Banco de Dados foi um pequeno gigante vencido, pois uma vez utilizado, muitas lógicas 
+precisaram ser modificadas, gerando um trabalho minucioso com uma grande gama de ajustes.
 
 Acredito que este foi, até agora o projeto mais desafiador que já fiz parte, onde exercitei minha Lógica de Programação
 a niveis onde nunca tinha usado antes, além de Banco de Dados Relacional, Git, Java e o trabalho em equipe.

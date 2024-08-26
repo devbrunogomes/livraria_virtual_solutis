@@ -7,16 +7,14 @@ import solutis.livrariavirtual_solutis.model.LivroDAO;
 import solutis.livrariavirtual_solutis.model.VendaDAO;
 
 /**
- * Estrutura das classes
- *
- * Atributos Construtor Getters e Setters Métodos Overrides
- *
+ * GET STARTED
+ * 
+ * 1 - Execute as querys em querysSQL.sql
+ * 2 - Execute as querys em livrosSQL.sql
+ * 3 - Vá ao arquivo DAO.java e verifique as informacoes de porta, user e senha
+ * 4 - Após isso, execute o programa e faça os testes*
  */
 
-/** TO DO
-* Em cadastro de Livro, atualizar o estoque
-* Sobreescrever metodos toString das classes
-*/
 public class Application {
 
     public static void main(String[] args) {

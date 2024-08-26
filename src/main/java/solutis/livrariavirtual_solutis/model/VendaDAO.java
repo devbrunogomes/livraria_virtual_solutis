@@ -19,12 +19,13 @@ public class VendaDAO {
     }
 
     public void adicionarVenda(Venda venda) {
-        String sqlVenda = "INSERT INTO Venda (cliente, valor) VALUES (?, ?)";
+        String sqlVenda = "INSERT INTO Venda (id, cliente, valor) VALUES (?, ?, ?)";
        
 
         try (PreparedStatement stmtVenda = conn.prepareStatement(sqlVenda, Statement.RETURN_GENERATED_KEYS)) {
-            stmtVenda.setString(1, venda.getCliente());
-            stmtVenda.setFloat(2, venda.getValor()); 
+            stmtVenda.setLong(1, venda.getNumero());
+            stmtVenda.setString(2, venda.getCliente());
+            stmtVenda.setFloat(3, venda.getValor()); 
 
             int rowsAffected = stmtVenda.executeUpdate();
             
@@ -44,7 +45,7 @@ public class VendaDAO {
         }
     }
 
-    private void adicionarLivroVendido(long vendaId, Livro livro) {
+    public void adicionarLivroVendido(long vendaId, Livro livro) {
         String sql = "INSERT INTO LivrosVendidos (venda_id, livro_id) VALUES (?, ?)"; 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, vendaId);

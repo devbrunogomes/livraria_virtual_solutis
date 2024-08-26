@@ -82,6 +82,11 @@ public class Venda {
 
             
             valorTotal += livroASerVendido.getPreco();
+            
+            //Pegar o valor do frete se for um livro impresso
+            if (livroASerVendido instanceof LivroImpresso) {
+                valorTotal += ((LivroImpresso) livroASerVendido).getFrete();
+            }
         }
 
         setValor(valorTotal);

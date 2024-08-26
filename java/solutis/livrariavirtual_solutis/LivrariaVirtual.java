@@ -1,8 +1,6 @@
 package solutis.livrariavirtual_solutis;
 
 import solutis.livrariavirtual_solutis.model.*;
-
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,9 +156,7 @@ public class LivrariaVirtual {
         System.out.print("Quantos livros serão comprados? ");
         int qntdLivrosVenda = scan.nextInt();
 
-        Venda vendaAtual = new Venda(nomeCliente);
-        
-        List<Livro> livrosSelecionados = new ArrayList<>(); 
+        Venda vendaAtual = new Venda(nomeCliente);        
         
         for (int i = 0; i < qntdLivrosVenda; i++) {
             System.out.println("Qual o tipo do livro " + (i + 1) + "?");
@@ -173,8 +169,6 @@ public class LivrariaVirtual {
             List<Livro> livrosDisponiveis;
 
             switch (resposta) {
-                //case 1 -> listarLivrosImpressos();
-                //case 2 -> listarLivrosEletronicos();
             case 1:
             	livrosDisponiveis = livroDAO.listarLivros("impresso");
                 break;

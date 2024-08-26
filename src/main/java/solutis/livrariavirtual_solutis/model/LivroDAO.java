@@ -79,8 +79,8 @@ public class LivroDAO {
             while (rs.next()) {
                 Livro livro;
                 String tipo = rs.getString("tipo");
-
-                if (tipo.equals("impresso")) {
+                
+                if (tipo.equals("impresso") && rs.getInt("estoque") > 0) {                    
                     livro = new LivroImpresso(
                             rs.getLong("id"),
                             rs.getFloat("frete"),
@@ -89,7 +89,7 @@ public class LivroDAO {
                             rs.getString("autores"),
                             rs.getString("editora"),
                             rs.getFloat("preco")
-                    );
+                    );     
                 } else {
                     livro = new LivroEletronico(
                             rs.getLong("id"),
@@ -125,8 +125,8 @@ public class LivroDAO {
                 if (tipo.equals("impresso")) {
                     livro = new LivroImpresso(
                             rs.getLong("id"),
-                            0,
-                            0,
+                            rs.getFloat("frete"),
+                            rs.getInt("estoque"),
                             rs.getString("titulo"),
                             rs.getString("autores"),
                             rs.getString("editora"),
@@ -149,10 +149,29 @@ public class LivroDAO {
             e.printStackTrace();
         }
         for (Livro livro : livros) {
-            System.out.println(livro);
+            
         }
         return livros;
     }
+    
+    public void atualizarEstoqueLivro(long id, int novoEstoque) {
+    String sql = "UPDATE Livro SET estoque = ? WHERE id = ?";
+
+    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, novoEstoque);
+        pstmt.setLong(2, id);
+
+        int rowsAffected = pstmt.executeUpdate();
+
+        if (rowsAffected > 0) {
+            System.out.println("Estoque do livro com ID " + id + " atualizado para " + novoEstoque);
+        } else {
+            System.out.println("Nenhum livro encontrado com o ID " + id);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
 
     /* public void atualizarLivro(Livro livro) {
         String sql = "UPDATE Livro SET titulo = ?, autores = ?, editora = ?, preco = ?, tipo = ? WHERE id = ?";

@@ -42,8 +42,8 @@ public class LivroImpresso extends Livro {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Id: %-8s Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f ", getId(),
-            getTitulo(), getAutores(), getEditora(), getPreco()));
+        sb.append(String.format("Id: %-5s Titulo: %-35s Autores: %-25s Editora: %-30s Preço: %-10.2f Estoque: %-5s", getId(),
+            getTitulo(), getAutores(), getEditora(), getPreco(), getEstoque()));
         return sb.toString();
     }
 

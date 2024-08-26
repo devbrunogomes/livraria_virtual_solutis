@@ -28,7 +28,7 @@ public class LivroEletronico extends Livro {
       @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Id: %-8s Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f Tamanho(KB):%-10d%n", getId(),
+        sb.append(String.format("Id: %-5s Titulo: %-35s Autores: %-25s Editora: %-30s Preço: %-8.2f Tamanho(KB):%-10d", getId(),
             getTitulo(), getAutores(), getEditora(), getPreco(), getTamanho()));
         return sb.toString();
     }

@@ -9,13 +9,13 @@ import solutis.livrariavirtual_solutis.model.LivroDAO;
 import solutis.livrariavirtual_solutis.model.VendaDAO;
 
 public class LivrariaVirtual {
-
+    //Instancias para banco de dados
     private LivroDAO livroDAO;
     private VendaDAO vendaDAO;
 
     ArrayList<Livro> livrosCadastrados = new ArrayList<>();
     ArrayList<Venda> vendasRealizadas = new ArrayList<>();
-    LivroImpresso livroImpresso;
+    
 
     // Atributos
     private final int MAX_IMPRESSOS = 10;
@@ -111,7 +111,7 @@ public class LivrariaVirtual {
         numEletronicos++;
         livroDAO.cadastrarLivroEletronico(livroEletronico);
 
-        return livroImpresso;  // Ou retorne livroEletronico se preferir, ou altere a lógica para escolher qual livro retornar
+        return livroImpresso;  // Retorno para exibicao de Caixa de texto
     }
 
     public Livro cadastrarLivroImpresso() {
@@ -131,7 +131,7 @@ public class LivrariaVirtual {
         livrosCadastrados.add((int) index++, novoLivroImpresso);
         numImpressos++;
         livroDAO.cadastrarLivroImpresso(novoLivroImpresso);
-        return novoLivroImpresso;
+        return novoLivroImpresso; // Retorno para exibicao de Caixa de texto
     }
 
     public Livro cadastrarLivroEletronico() {
@@ -150,11 +150,18 @@ public class LivrariaVirtual {
         livrosCadastrados.add((int) index++, novoLivroEletronico);
         numEletronicos++;
         livroDAO.cadastrarLivroEletronico(novoLivroEletronico);
-        return novoLivroEletronico;
+        return novoLivroEletronico; // Retorno para exibicao de Caixa de texto
     }
 
     public void realizarVenda() {
+        //Sair se variavel local chegou ao maximo
         if (numVendas >= MAX_VENDAS) {
+            JOptionPane.showMessageDialog(null, "Limite de Vendas atingido!");
+            return;
+        }
+        
+        //Sair se quantidade de vendas no banco de dados chegou ao maximo
+        if (vendaDAO.listarVendas().size() >= MAX_VENDAS) {
             JOptionPane.showMessageDialog(null, "Limite de Vendas atingido!");
             return;
         }
@@ -163,8 +170,9 @@ public class LivrariaVirtual {
 
         String nomeCliente = JOptionPane.showInputDialog("Insira o nome do Cliente:");
         int qntdLivrosVenda = Integer.parseInt(JOptionPane.showInputDialog("Quantos livros serão comprados?"));
-
-        Venda vendaAtual = new Venda(nomeCliente); // Nova instancia da venda atual
+        
+        // Nova instancia da venda atual
+        Venda vendaAtual = new Venda(nomeCliente); 
 
         //Loop que vai até a quantidade maxima que o usuario inseriu
         for (int i = 0; i < qntdLivrosVenda; i++) {
@@ -175,11 +183,9 @@ public class LivrariaVirtual {
             if (tipoLivro == null) {
                 JOptionPane.showMessageDialog(null, "Operação cancelada.");
                 return;
-            }
+            }   
 
-            List<Livro> livrosDisponiveis; //Exibicao dos livros do BD       
-
-            Livro livroSelecionado = null;
+            Livro livroSelecionado = null; //Para armazenar o livro escolhido
 
             switch (tipoLivro) {
                 case "Livro Impresso":
@@ -221,7 +227,7 @@ public class LivrariaVirtual {
                     return;
             }
 
-            // Adiciona o livro selecionado à venda atual
+            // Adiciona o livro selecionado ao Array da venda atual
             if (livroSelecionado != null) {
                 vendaAtual.addLivro(livroSelecionado, i);
             } else {
@@ -245,14 +251,19 @@ public class LivrariaVirtual {
 
             //Adicionar venda ao Banco de dados
             vendaDAO.adicionarVenda(vendaAtual);
-
-//            for (Livro livroNoCarrinho : vendaAtual.getLivrosASeremVendidos()) {
-//                //Adicionar cada livro ao BD, associando à mesma venda
-//                vendaDAO.adicionarLivroVendido(numVendas, livroImpresso);
-//            }
-
+            
+            //Atualizar o estoque do banco de dados
+            for (Livro livroNoCarrinho : vendaAtual.getLivrosASeremVendidos()) {
+                //se for impresso
+                if (livroNoCarrinho instanceof LivroImpresso) {                    
+                    int novoEstoque = ((LivroImpresso) livroNoCarrinho).getEstoque() - 1;
+                    livroDAO.atualizarEstoqueLivro(livroNoCarrinho.getId(), novoEstoque);
+                }
+            }
+            
+            
             this.numVendas++;
-            //livroImpresso.atualizarEstoque(qtdLivrosImpressos);
+            
         } else {
             vendaAtual.setValor(0);
             JOptionPane.showMessageDialog(null, "VENDA CANCELADA");
@@ -266,8 +277,7 @@ public class LivrariaVirtual {
         StringBuilder livrosImpressoList = new StringBuilder();
         for (int i = 0; i < livrosImpressosDisponiveis.size(); i++) {
             if (livrosImpressosDisponiveis.get(i) instanceof LivroImpresso) {
-                livrosImpressoList.append("Livro [").append(i + 1).append("]\n")
-                        .append(livrosImpressosDisponiveis.get(i)).append("\n\n");
+                livrosImpressoList.append(livrosImpressosDisponiveis.get(i)).append("\n");
             }
         }
 
@@ -279,7 +289,7 @@ public class LivrariaVirtual {
 
         // Colocando a JTextArea dentro de um JScrollPane
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setPreferredSize(new Dimension(500, 300)); // Tamanho preferido
+        scrollPane.setPreferredSize(new Dimension(1000, 300)); // Tamanho preferido
 
         // Exibindo o JScrollPane em um JOptionPane
         JOptionPane.showMessageDialog(null, scrollPane, "Livros Impressos Disponíveis", JOptionPane.INFORMATION_MESSAGE);
@@ -292,8 +302,7 @@ public class LivrariaVirtual {
         StringBuilder livrosEletronicoList = new StringBuilder();
         for (int i = 0; i < livrosEletronicosDisponiveis.size(); i++) {
             if (livrosEletronicosDisponiveis.get(i) instanceof LivroEletronico) {
-                livrosEletronicoList.append("Livro [").append(i + 1).append("]\n")
-                        .append(livrosEletronicosDisponiveis.get(i)).append("\n\n");
+                livrosEletronicoList.append(livrosEletronicosDisponiveis.get(i)).append("\n");
             }
         }
 
@@ -305,7 +314,7 @@ public class LivrariaVirtual {
 
         // Colocando a JTextArea dentro de um JScrollPane
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setPreferredSize(new Dimension(800, 300)); // Tamanho preferido
+        scrollPane.setPreferredSize(new Dimension(1000, 300)); // Tamanho preferido
 
         // Exibindo o JScrollPane em um JOptionPane
         JOptionPane.showMessageDialog(null, scrollPane, "Livros Eletrônicos Disponíveis", JOptionPane.INFORMATION_MESSAGE);
@@ -317,8 +326,7 @@ public class LivrariaVirtual {
 
         StringBuilder livrosEletronicoList = new StringBuilder();
         for (int i = 0; i < todosLivrosDisponiveis.size(); i++) {
-            livrosEletronicoList.append("Livro [").append(i + 1).append("]\n")
-                    .append(todosLivrosDisponiveis.get(i)).append("\n\n");
+            livrosEletronicoList.append(todosLivrosDisponiveis.get(i)).append("\n");
         }
 
         // Criando uma JTextArea para exibir os livros
@@ -329,7 +337,7 @@ public class LivrariaVirtual {
 
         // Colocando a JTextArea dentro de um JScrollPane
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setPreferredSize(new Dimension(800, 300)); // Tamanho preferido
+        scrollPane.setPreferredSize(new Dimension(1000, 300)); // Tamanho preferido
 
         // Exibindo o JScrollPane em um JOptionPane
         JOptionPane.showMessageDialog(null, scrollPane, "Livros Disponíveis", JOptionPane.INFORMATION_MESSAGE);
@@ -371,8 +379,8 @@ public class LivrariaVirtual {
 
         StringBuilder mensagem = new StringBuilder();
         for (int i = 0; i < listaDeVendasBancoDeDados.size(); i++) {
-            mensagem.append("Venda ").append(listaDeVendasBancoDeDados.get(i).getNumero()).append("\n");
-            mensagem.append(listaDeVendasBancoDeDados.get(i)).append("\n\n");
+            
+            mensagem.append(listaDeVendasBancoDeDados.get(i)).append("\n");
         }
         JOptionPane.showMessageDialog(null, mensagem.length() > 0 ? mensagem.toString() : "Nenhuma venda realizada.");
     }

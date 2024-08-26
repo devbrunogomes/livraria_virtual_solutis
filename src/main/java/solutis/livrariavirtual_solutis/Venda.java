@@ -77,12 +77,10 @@ public class Venda {
             valorAoTotal += livro.getPreco();
         }
         
-        setValor(valorAoTotal);
+        setValor(valorAoTotal + getValor());
     }
 
     public void listarLivros() {
-        float valorTotal = 0;
-
         System.out.println("\n-- Livros no Carrinho --");
 
         //Loop For
@@ -90,8 +88,6 @@ public class Venda {
             System.out.println("Titulo - " + livroASerVendido.titulo);
             System.out.println("Preco - " + livroASerVendido.getPreco());
         }
-
-        
     }
     
     @Override

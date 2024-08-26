@@ -24,10 +24,12 @@ public class LivroEletronico extends Livro {
     }
 
     //Metodo toString
-    @Override
+      @Override
     public String toString() {
-        return super.toString();
-        //To do: adicionar o Tamanho
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f Tamanho(KB):%-10d%n", 
+            getTitulo(), getAutores(), getEditora(), getPreco(), getTamanho()));
+        return sb.toString();
     }
 
 }

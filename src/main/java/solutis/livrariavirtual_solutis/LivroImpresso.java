@@ -40,8 +40,11 @@ public class LivroImpresso extends Livro {
 
     @Override
     public String toString() {
-        return super.toString();
-        //To do: acrescentar frete e estoque
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f ", 
+            getTitulo(), getAutores(), getEditora(), getPreco()));
+        return sb.toString();
     }
+
 
 }

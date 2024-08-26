@@ -70,11 +70,18 @@ public class Venda {
             System.out.println("Titulo - " + livroASerVendido.titulo);
             System.out.println("Preco - " + livroASerVendido.getPreco());
 
-            //Pra cada iteracao, aumentar o valorTotal
+            
             valorTotal += livroASerVendido.getPreco();
         }
 
-        //Ao final do loop, alterar o valor da venda
         setValor(valorTotal);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("Número: %-20s Cliente: %-20s Preço: %-10.2f ", 
+            getNumero(), getCliente(), getValor()));
+        return sb.toString();
     }
 }

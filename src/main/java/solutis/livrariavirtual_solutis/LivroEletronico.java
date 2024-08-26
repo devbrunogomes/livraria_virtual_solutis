@@ -9,6 +9,7 @@ public class LivroEletronico extends Livro {
     public LivroEletronico(long id, int tamanho, String titulo, String autores, String editora, float preco) {
         super(titulo, autores, editora, preco);
         this.tamanho = tamanho;
+        this.id = id;
     }
 
     public LivroEletronico() {
@@ -27,7 +28,7 @@ public class LivroEletronico extends Livro {
       @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f Tamanho(KB):%-10d%n", 
+        sb.append(String.format("Id: %-8s Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f Tamanho(KB):%-10d%n", getId(),
             getTitulo(), getAutores(), getEditora(), getPreco(), getTamanho()));
         return sb.toString();
     }

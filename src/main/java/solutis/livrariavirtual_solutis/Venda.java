@@ -66,8 +66,18 @@ public class Venda {
 
     //Metodos
     public void addLivro(Livro livro, long index) {
+        float valorAoTotal = 0;
+        
         System.out.println("Adicionando livro ao carrinho");
-        livrosASeremVendidos.add((int)index,livro);
+        livrosASeremVendidos.add(livro);
+        
+        if (livro instanceof LivroImpresso) {
+            valorAoTotal += livro.getPreco() + ((LivroImpresso) livro).getFrete();
+        } else{
+            valorAoTotal += livro.getPreco();
+        }
+        
+        setValor(valorAoTotal);
     }
 
     public void listarLivros() {
@@ -79,17 +89,9 @@ public class Venda {
         for (Livro livroASerVendido : livrosASeremVendidos) {
             System.out.println("Titulo - " + livroASerVendido.titulo);
             System.out.println("Preco - " + livroASerVendido.getPreco());
-
-            
-            valorTotal += livroASerVendido.getPreco();
-            
-            //Pegar o valor do frete se for um livro impresso
-            if (livroASerVendido instanceof LivroImpresso) {
-                valorTotal += ((LivroImpresso) livroASerVendido).getFrete();
-            }
         }
 
-        setValor(valorTotal);
+        
     }
     
     @Override

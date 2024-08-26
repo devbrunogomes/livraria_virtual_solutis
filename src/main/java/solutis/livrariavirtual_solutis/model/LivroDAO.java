@@ -1,6 +1,5 @@
 package solutis.livrariavirtual_solutis.model;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,15 +10,13 @@ import solutis.livrariavirtual_solutis.Livro;
 import solutis.livrariavirtual_solutis.LivroEletronico;
 import solutis.livrariavirtual_solutis.LivroImpresso;
 
-
-
 public class LivroDAO {
-	  private Connection conn;
 
-	
-	    public LivroDAO(Connection conn) {
-	        this.conn = conn;
-	    }
+    private Connection conn;
+
+    public LivroDAO(Connection conn) {
+        this.conn = conn;
+    }
 
     public void cadastrarLivroImpresso(LivroImpresso livro) {
         String sql = "INSERT INTO Livro (titulo, autores, editora, preco, tipo, estoque, tamanho, frete) VALUES (?,?,?,?,?,?,?,?)";
@@ -34,7 +31,7 @@ public class LivroDAO {
             pstmt.setInt(6, livro.getEstoque());
             pstmt.setInt(7, 0);
             pstmt.setFloat(8, livro.getFrete());
-            
+
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Livro cadastrado com sucesso!");
@@ -45,7 +42,7 @@ public class LivroDAO {
             e.printStackTrace();
         }
     }
-    
+
     public void cadastrarLivroEletronico(LivroEletronico livro) {
         String sql = "INSERT INTO Livro (titulo, autores, editora, preco, tipo, estoque, tamanho, frete) VALUES (?,?,?,?,?,?,?,?)";
 
@@ -59,7 +56,7 @@ public class LivroDAO {
             pstmt.setInt(6, 0);
             pstmt.setInt(7, livro.getTamanho());
             pstmt.setFloat(8, 0);
-            
+
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Livro cadastrado com sucesso!");
@@ -70,7 +67,7 @@ public class LivroDAO {
             e.printStackTrace();
         }
     }
-    
+
     public List<Livro> listarLivros(String tipoFiltro) {
         List<Livro> livros = new ArrayList<>();
         String sql = "SELECT * FROM  Livro WHERE tipo = ?";
@@ -85,23 +82,64 @@ public class LivroDAO {
 
                 if (tipo.equals("impresso")) {
                     livro = new LivroImpresso(
-                        rs.getLong("id"),
-                        0,
-                        0,
-                        rs.getString("titulo"),
-                        rs.getString("autores"),
-                        rs.getString("editora"),
-                        rs.getFloat("preco")
-                        
+                            rs.getLong("id"),
+                            rs.getFloat("frete"),
+                            rs.getInt("estoque"),
+                            rs.getString("titulo"),
+                            rs.getString("autores"),
+                            rs.getString("editora"),
+                            rs.getFloat("preco")
                     );
                 } else {
                     livro = new LivroEletronico(
-                        rs.getLong("id"),
-                        0,
-                        rs.getString("titulo"),
-                        rs.getString("autores"),
-                        rs.getString("editora"),
-                        rs.getFloat("preco")
+                            rs.getLong("id"),
+                            rs.getInt("tamanho"),
+                            rs.getString("titulo"),
+                            rs.getString("autores"),
+                            rs.getString("editora"),
+                            rs.getFloat("preco")
+                    );
+                    
+                }
+
+                livros.add(livro);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return livros;
+    }
+
+    public List<Livro> listarTodosLivros() {
+        List<Livro> livros = new ArrayList<>();
+        String sql = "SELECT * FROM Livro";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Livro livro;
+                String tipo = rs.getString("tipo");
+
+                // Verifica o tipo de livro e instancia a classe correta
+                if (tipo.equals("impresso")) {
+                    livro = new LivroImpresso(
+                            rs.getLong("id"),
+                            0,
+                            0,
+                            rs.getString("titulo"),
+                            rs.getString("autores"),
+                            rs.getString("editora"),
+                            rs.getFloat("preco")
+                    );
+                } else {
+                    livro = new LivroEletronico(
+                            rs.getLong("id"),
+                            rs.getInt("tamanho"),
+                            rs.getString("titulo"),
+                            rs.getString("autores"),
+                            rs.getString("editora"),
+                            rs.getFloat("preco")
                     );
                 }
 
@@ -110,19 +148,13 @@ public class LivroDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        int index =1;
         for (Livro livro : livros) {
-        	System.out.println("Livro ["  + index + "]");
-        	System.out.println(livro);
-        	System.out.println();
-        	index++;
-			
-		}
+            System.out.println(livro);
+        }
         return livros;
     }
 
-   /* public void atualizarLivro(Livro livro) {
+    /* public void atualizarLivro(Livro livro) {
         String sql = "UPDATE Livro SET titulo = ?, autores = ?, editora = ?, preco = ?, tipo = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -201,6 +233,4 @@ public class LivroDAO {
 
         return livro;
     }*/
-
-	
 }

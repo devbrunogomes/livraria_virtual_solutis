@@ -11,6 +11,7 @@ public class LivroImpresso extends Livro {
         super(titulo, autores, editora, preco);
         this.frete = frete;
         this.estoque = estoque;
+        this.id = id;
     }
 
     public LivroImpresso() {
@@ -41,7 +42,7 @@ public class LivroImpresso extends Livro {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f ", 
+        sb.append(String.format("Id: %-8s Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f ", getId(),
             getTitulo(), getAutores(), getEditora(), getPreco()));
         return sb.toString();
     }

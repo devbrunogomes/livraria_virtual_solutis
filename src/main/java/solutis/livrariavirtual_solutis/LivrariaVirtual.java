@@ -1,12 +1,13 @@
 package solutis.livrariavirtual_solutis;
 
+import javax.swing.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
-
+import solutis.livrariavirtual_solutis.LivroImpresso;
 public class LivrariaVirtual {
 
     ArrayList<Livro> livrosCadastrados = new ArrayList<>();
     ArrayList<Venda> vendasRealizadas = new ArrayList<>();
+    LivroImpresso livroImpresso;
 
     // Atributos
     private final int MAX_IMPRESSOS = 10;
@@ -147,6 +148,7 @@ public class LivrariaVirtual {
             JOptionPane.showMessageDialog(null, "Limite de Vendas atingido!");
             return;
         }
+        int qtdLivrosImpressos = 0;
 
         String nomeCliente = JOptionPane.showInputDialog("Insira o nome do Cliente:");
         int qntdLivrosVenda = Integer.parseInt(JOptionPane.showInputDialog("Quantos livros serão comprados?"));
@@ -186,8 +188,8 @@ public class LivrariaVirtual {
                         break;
                     }
                 }
+                qtdLivrosImpressos++;
                 break;
-
             case "Livro Eletrônico":
                 // Cria uma lista de títulos de livros eletrônicos disponíveis
                 ArrayList<String> titulosEletronicos = new ArrayList<>();
@@ -234,6 +236,7 @@ public class LivrariaVirtual {
             vendasRealizadas.add(numVendas, vendaAtual);
             this.numVendas++;
             vendaAtual.setNumero(this.getNumVendas());
+            livroImpresso.atualizarEstoque(qtdLivrosImpressos);
         } else {
             vendaAtual.setValor(0);
             JOptionPane.showMessageDialog(null, "VENDA CANCELADA");

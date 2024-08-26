@@ -34,8 +34,8 @@ public class LivroImpresso extends Livro {
     }
 
     //Métodos
-    public void atualizarEstoque() {
-
+    public void atualizarEstoque(int qtdLivros) {
+        this.estoque -= qtdLivros;
     }
 
     @Override

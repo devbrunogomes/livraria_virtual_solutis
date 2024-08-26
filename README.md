@@ -34,7 +34,7 @@ Ações referente à vendas: VendaDao.java
 
 ### 1 - Danielle Sanches
 
-Minha participação no projeto de livraria virtual envolveu a criação e estruturação do banco de dados no MySQL, utilizando o MySQL Workbench 8.0.39 e o plugin JDBC 8.0.33 para conectar a aplicação Java ao banco de dados. Estruturei o banco de dados com tabelas para gerenciar livros, vendas e a relação entre vendas e livros vendidos, além de implementar classes DAO para manipular os dados, garantindo uma interação eficiente e segura. Foi uma experiência desafiadora, pois se tratou de uma experiência totalmente nova para mim, exigindo um estudo minucioso de diferentes lógicas, o trabalho de equipe foi imprescindível para o sucesso do projeto pois cada um contruibição com o  seu melhor para obtermos o resultado esperado.
+Minha participação no projeto de livraria virtual envolveu a criação e estruturação do banco de dados no MySQL, utilizando o MySQL Workbench 8.0.39 e o plugin JDBC 8.0.33 para conectar a aplicação Java ao banco de dados. Estruturei o banco de dados com tabelas para gerenciar livros, vendas e a relação entre vendas e livros vendidos, além de implementar classes DAO para manipular os dados, garantindo uma interação eficiente e segura. Foi uma experiência desafiadora, pois se tratou de uma experiência totalmente nova para mim, exigindo um estudo minucioso de diferentes lógicas, o trabalho de equipe foi imprescindível para o sucesso do projeto pois cada um contruibuiu com o seu melhor para obtermos o resultado esperado.
 
 ---
 

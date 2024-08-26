@@ -7,21 +7,12 @@ CREATE TABLE Livro (
     autores VARCHAR(255),
     editora VARCHAR(255),
     preco DECIMAL(10, 2),
-    tipo ENUM('LivroImpresso', 'LivroEletronico')
+    tipo ENUM('impresso', 'eletronico'),
+    estoque int, 
+    tamanho int,
+    frete decimal(10 ,2 )
 );
 
-CREATE TABLE LivroImpresso (
-    id BIGINT PRIMARY KEY,
-    frete DECIMAL(10, 2),
-    estoque INT,
-    FOREIGN KEY (id) REFERENCES Livro(id)
-);
-
-CREATE TABLE LivroEletronico (
-    id BIGINT PRIMARY KEY,
-    tamanho INT,
-    FOREIGN KEY (id) REFERENCES Livro(id)
-);
 
 CREATE TABLE Venda (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -29,12 +20,20 @@ CREATE TABLE Venda (
     valor DECIMAL(10, 2)
 );
 
-CREATE TABLE LivroVenda (
+CREATE TABLE LivrosVendidos (
     venda_id BIGINT,
     livro_id BIGINT,
-    FOREIGN KEY (venda_id) REFERENCES Venda(id),
-    FOREIGN KEY (livro_id) REFERENCES Livro(id),
-    PRIMARY KEY (venda_id, livro_id) 
+    PRIMARY KEY (venda_id, livro_id),
+    FOREIGN KEY (venda_id) REFERENCES Venda(id) ON DELETE CASCADE,
+    FOREIGN KEY (livro_id) REFERENCES Livro(id) ON DELETE CASCADE
 );
 
-SELECT * FROM Livro WHERE Editora = aaa;
+
+
+
+SELECT * FROM  Venda;
+
+
+ 
+
+ 

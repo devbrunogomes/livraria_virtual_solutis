@@ -1,5 +1,5 @@
 
-package solutis.livrariavirtual_solutis;
+package solutis.livrariavirtual_solutis.model;
 
 
 public abstract class Livro {
@@ -12,7 +12,8 @@ public abstract class Livro {
     protected float preco;
     
     //Construtor
-    public Livro(String titulo, String autores, String editora, float preco) {
+    public Livro(long id, String titulo, String autores, String editora, float preco) {
+    	this.id = id;
         this.titulo = titulo;
         this.autores = autores;
         this.editora = editora;
@@ -23,15 +24,14 @@ public abstract class Livro {
     }
     
     //Getter e Setters
-
+    
     public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    	return id;
     }
     
+    public void setId(long id) {
+    	this.id = id;
+    }
 
     public String getTitulo() {
         return titulo;
@@ -56,8 +56,8 @@ public abstract class Livro {
     public void setEditora(String editora) {
         this.editora = editora;
     }
-
-     //não seria  mais  interessante a  classBigDecimal q  lida com valores??
+    
+   
     public float getPreco() {
         return preco;
     }

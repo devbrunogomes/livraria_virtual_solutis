@@ -15,8 +15,8 @@ public class LivrariaVirtual {
     private final int MAX_VENDAS = 50;
     private int numImpressos = 0;
     private int numEletronicos = 0;
-    private int numVendas = 0;
-    private int index = 0;
+    private long numVendas = 0;
+    private long index = 0;
 
     // Construtores
     public LivrariaVirtual(int numImpressos, int numEletronicos, int numVendas) {
@@ -45,11 +45,11 @@ public class LivrariaVirtual {
         this.numEletronicos = numEletronicos;
     }
 
-    public int getNumVendas() {
+    public long getNumVendas() {
         return numVendas;
     }
 
-    public void setNumVendas(int numVendas) {
+    public void setNumVendas(long numVendas) {
         this.numVendas = numVendas;
     }
 
@@ -92,12 +92,12 @@ public class LivrariaVirtual {
     float precoEletronico = Float.parseFloat(JOptionPane.showInputDialog("Preço do livro eletrônico:"));
     int tamanho = Integer.parseInt(JOptionPane.showInputDialog("Tamanho do arquivo (KB):"));
 
-    LivroImpresso livroImpresso = new LivroImpresso(frete, estoque, titulo, autores, editora, precoImpresso);
-    livrosCadastrados.add(index++, livroImpresso);
+    LivroImpresso livroImpresso = new LivroImpresso(index, frete, estoque, titulo, autores, editora, precoImpresso);
+    livrosCadastrados.add((int) index++, livroImpresso);
     numImpressos++;
 
-    LivroEletronico livroEletronico = new LivroEletronico(tamanho, titulo, autores, editora, precoEletronico);
-    livrosCadastrados.add(index++, livroEletronico);
+    LivroEletronico livroEletronico = new LivroEletronico(index,tamanho, titulo, autores, editora, precoEletronico);
+    livrosCadastrados.add((int) index++, livroEletronico);
     numEletronicos++;
 
     return livroImpresso;  // Ou retorne livroEletronico se preferir, ou altere a lógica para escolher qual livro retornar
@@ -117,8 +117,8 @@ public class LivrariaVirtual {
     int estoque = Integer.parseInt(JOptionPane.showInputDialog("Estoque:"));
     float preco = Float.parseFloat(JOptionPane.showInputDialog("Preço:"));
 
-    LivroImpresso novoLivroImpresso = new LivroImpresso(frete, estoque, titulo, autores, editora, preco);
-    livrosCadastrados.add(index++, novoLivroImpresso);
+    LivroImpresso novoLivroImpresso = new LivroImpresso(index, frete, estoque, titulo, autores, editora, preco);
+    livrosCadastrados.add((int)index++, novoLivroImpresso);
     numImpressos++;
     return novoLivroImpresso;
 }
@@ -136,8 +136,8 @@ public class LivrariaVirtual {
     int tamanho = Integer.parseInt(JOptionPane.showInputDialog("Tamanho do arquivo (KB):"));
     float preco = Float.parseFloat(JOptionPane.showInputDialog("Preço:"));
 
-    LivroEletronico novoLivroEletronico = new LivroEletronico(tamanho, titulo, autores, editora, preco);
-    livrosCadastrados.add(index++, novoLivroEletronico);
+    LivroEletronico novoLivroEletronico = new LivroEletronico(index, tamanho, titulo, autores, editora, preco);
+    livrosCadastrados.add((int) index++, novoLivroEletronico);
     numEletronicos++;
     return novoLivroEletronico;
 }
@@ -233,7 +233,7 @@ public class LivrariaVirtual {
 
         if (respostaConfirmarVenda == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(null, "VENDA REALIZADA");
-            vendasRealizadas.add(numVendas, vendaAtual);
+            vendasRealizadas.add((int) numVendas, vendaAtual);
             this.numVendas++;
             vendaAtual.setNumero(this.getNumVendas());
             livroImpresso.atualizarEstoque(qtdLivrosImpressos);

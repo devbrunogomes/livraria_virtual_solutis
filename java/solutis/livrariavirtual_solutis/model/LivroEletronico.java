@@ -1,4 +1,5 @@
-package solutis.livrariavirtual_solutis;
+package solutis.livrariavirtual_solutis.model;
+
 
 public class LivroEletronico extends Livro {
 
@@ -7,7 +8,7 @@ public class LivroEletronico extends Livro {
 
     //Construtores
     public LivroEletronico(long id, int tamanho, String titulo, String autores, String editora, float preco) {
-        super(titulo, autores, editora, preco);
+        super(id, titulo, autores, editora, preco);
         this.tamanho = tamanho;
     }
 
@@ -24,12 +25,10 @@ public class LivroEletronico extends Livro {
     }
 
     //Metodo toString
-      @Override
+    @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f Tamanho(KB):%-10d%n", 
-            getTitulo(), getAutores(), getEditora(), getPreco(), getTamanho()));
-        return sb.toString();
+        return super.toString();
+        //To do: adicionar o Tamanho
     }
 
 }

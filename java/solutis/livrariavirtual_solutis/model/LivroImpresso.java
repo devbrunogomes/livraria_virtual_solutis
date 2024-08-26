@@ -1,4 +1,5 @@
-package solutis.livrariavirtual_solutis;
+package solutis.livrariavirtual_solutis.model;
+
 
 public class LivroImpresso extends Livro {
 
@@ -7,8 +8,8 @@ public class LivroImpresso extends Livro {
     protected int estoque;
 
     //Construtores
-    public LivroImpresso(long id,float frete, int estoque, String titulo, String autores, String editora, float preco) {
-        super(titulo, autores, editora, preco);
+    public LivroImpresso(long id, float frete, int estoque, String titulo, String autores, String editora, float preco) {
+        super(id, titulo, autores, editora, preco);
         this.frete = frete;
         this.estoque = estoque;
     }
@@ -17,6 +18,14 @@ public class LivroImpresso extends Livro {
     }
 
     //Getter e Setters
+    
+    public long getId() {
+    	return id;
+    }
+    
+    public void setId(long id) {
+    	this.id =id;
+    }
     public float getFrete() {
         return frete;
     }
@@ -34,17 +43,14 @@ public class LivroImpresso extends Livro {
     }
 
     //Métodos
-    public void atualizarEstoque(int qtdLivros) {
-        this.estoque -= qtdLivros;
+    public void atualizarEstoque() {
+
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f ", 
-            getTitulo(), getAutores(), getEditora(), getPreco()));
-        return sb.toString();
+        return super.toString();
+   
     }
-
 
 }

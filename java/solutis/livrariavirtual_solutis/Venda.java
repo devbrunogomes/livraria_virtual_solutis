@@ -1,10 +1,13 @@
 package solutis.livrariavirtual_solutis;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import solutis.livrariavirtual_solutis.model.Livro;
 
 public class Venda {
 
-    private ArrayList<Livro> livrosASeremVendidos = new ArrayList<>();
+    private List<Livro> livrosASeremVendidos = new ArrayList<>();
 
     //Atributos
     private static int numVendas;
@@ -22,22 +25,12 @@ public class Venda {
     }
 
     //Getters e Setters
-
-    public ArrayList<Livro> getLivrosASeremVendidos() {
-        return livrosASeremVendidos;
-    }
-
-    public void setLivrosASeremVendidos(ArrayList<Livro> livrosASeremVendidos) {
-        this.livrosASeremVendidos = livrosASeremVendidos;
-    }
-    
-    
     public int getNumVendas() {
         return numVendas;
     }
 
     public void setNumVendas(int numVendas) {
-        this.numVendas = numVendas;
+        Venda.numVendas = numVendas;
     }
 
     public long getNumero() {
@@ -45,7 +38,7 @@ public class Venda {
     }
 
     public void setNumero(long numero) {
-        this.numero = numero;
+        this.numero = numero ;
     }
 
     public String getCliente() {
@@ -60,14 +53,14 @@ public class Venda {
         return valor;
     }
 
-    public void setValor(float valor) {
-        this.valor = valor;
+    public void setValor(float valorTotal) {
+        this.valor = valorTotal;
     }
 
     //Metodos
-    public void addLivro(Livro livro, long index) {
+    public void addLivro(Livro livro, int index) {
         System.out.println("Adicionando livro ao carrinho");
-        livrosASeremVendidos.add((int)index,livro);
+        getLivrosASeremVendidos().add(index,livro);
     }
 
     public void listarLivros() {
@@ -76,22 +69,23 @@ public class Venda {
         System.out.println("\n-- Livros no Carrinho --");
 
         //Loop For
-        for (Livro livroASerVendido : livrosASeremVendidos) {
-            System.out.println("Titulo - " + livroASerVendido.titulo);
+        for (Livro livroASerVendido : getLivrosASeremVendidos()) {
+            System.out.println("Titulo - " + livroASerVendido.getTitulo());
             System.out.println("Preco - " + livroASerVendido.getPreco());
 
-            
-            valorTotal += livroASerVendido.getPreco();
+            //Pra cada iteracao, aumentar o valorTotal
+            valorTotal += (float)livroASerVendido.getPreco();
         }
 
+        //Ao final do loop, alterar o valor da venda
         setValor(valorTotal);
     }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Número: %-20s Cliente: %-20s Preço: %-10.2f ", 
-            getNumero(), getCliente(), getValor()));
-        return sb.toString();
-    }
+
+	public List<Livro> getLivrosASeremVendidos() {
+		return livrosASeremVendidos;
+	}
+
+	public void setLivrosASeremVendidos(List<Livro> livrosASeremVendidos) {
+		this.livrosASeremVendidos = livrosASeremVendidos;
+	}
 }

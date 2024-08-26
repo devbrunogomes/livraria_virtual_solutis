@@ -1,12 +1,21 @@
 package solutis.livrariavirtual_solutis;
 
+import java.awt.Dimension;
+import javax.swing.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import java.util.List;
+import solutis.livrariavirtual_solutis.LivroImpresso;
+import solutis.livrariavirtual_solutis.model.LivroDAO;
+import solutis.livrariavirtual_solutis.model.VendaDAO;
 
 public class LivrariaVirtual {
+    //Instancias para banco de dados
+    private LivroDAO livroDAO;
+    private VendaDAO vendaDAO;
 
     ArrayList<Livro> livrosCadastrados = new ArrayList<>();
     ArrayList<Venda> vendasRealizadas = new ArrayList<>();
+    
 
     // Atributos
     private final int MAX_IMPRESSOS = 10;
@@ -14,17 +23,14 @@ public class LivrariaVirtual {
     private final int MAX_VENDAS = 50;
     private int numImpressos = 0;
     private int numEletronicos = 0;
-    private int numVendas = 0;
-    private int index = 0;
+    private long numVendas = 1;
+    private long index = 0;
 
-    // Construtores
-    public LivrariaVirtual(int numImpressos, int numEletronicos, int numVendas) {
-        this.numImpressos = numImpressos;
-        this.numEletronicos = numEletronicos;
-        this.numVendas = numVendas;
-    }
+    // Construtor
 
-    public LivrariaVirtual() {
+    public LivrariaVirtual(VendaDAO vendaDAO, LivroDAO livroDAO) {
+        this.livroDAO = livroDAO;
+        this.vendaDAO = vendaDAO;
     }
 
     // Getters e Setters
@@ -44,184 +50,193 @@ public class LivrariaVirtual {
         this.numEletronicos = numEletronicos;
     }
 
-    public int getNumVendas() {
+    public long getNumVendas() {
         return numVendas;
     }
 
-    public void setNumVendas(int numVendas) {
+    public void setNumVendas(long numVendas) {
         this.numVendas = numVendas;
     }
 
     // Métodos
     public void cadastrarLivro() {
-    String[] opcoes = {"Impresso", "Eletrônico", "Ambos"};
-    String tipo = (String) JOptionPane.showInputDialog(null, "Qual tipo de livro deseja cadastrar?",
-            "Cadastro de Livro", JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+        String[] opcoes = {"Impresso", "Eletrônico", "Ambos"};
+        String tipo = (String) JOptionPane.showInputDialog(null, "Qual tipo de livro deseja cadastrar?",
+                "Cadastro de Livro", JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
-    Livro livroCriado = null;  // Variável para armazenar o livro recém-criado
+        Livro livroCriado = null;  // Variável para armazenar o livro recém-criado
 
-    switch (tipo) {
-        case "Impresso":
-            livroCriado = cadastrarLivroImpresso();
-            break;
-        case "Eletrônico":
-            livroCriado = cadastrarLivroEletronico();
-            break;
-        case "Ambos":
-            livroCriado = cadastroAmbos();
-            break;
-        default:
-            JOptionPane.showMessageDialog(null, "Opção inválida.");
-            break;
+        switch (tipo) {
+            case "Impresso":
+                livroCriado = cadastrarLivroImpresso();
+                break;
+            case "Eletrônico":
+                livroCriado = cadastrarLivroEletronico();
+                break;
+            case "Ambos":
+                livroCriado = cadastroAmbos();
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opção inválida.");
+                break;
+        }
+
+        if (livroCriado != null) {
+            JOptionPane.showMessageDialog(null, "Livro cadastrado:\n" + livroCriado);
+        }
     }
 
-    if (livroCriado != null) {
-        JOptionPane.showMessageDialog(null, "Livro cadastrado:\n" + livroCriado);
+    public Livro cadastroAmbos() {
+        String titulo = JOptionPane.showInputDialog("Título:");
+        String autores = JOptionPane.showInputDialog("Autores:");
+        String editora = JOptionPane.showInputDialog("Editora:");
+        float frete = Float.parseFloat(JOptionPane.showInputDialog("Frete:"));
+        int estoque = Integer.parseInt(JOptionPane.showInputDialog("Estoque:"));
+        float precoImpresso = Float.parseFloat(JOptionPane.showInputDialog("Preço do livro impresso:"));
+        float precoEletronico = Float.parseFloat(JOptionPane.showInputDialog("Preço do livro eletrônico:"));
+        int tamanho = Integer.parseInt(JOptionPane.showInputDialog("Tamanho do arquivo (KB):"));
+
+        LivroImpresso livroImpresso = new LivroImpresso(index, frete, estoque, titulo, autores, editora, precoImpresso);
+        livrosCadastrados.add((int) index++, livroImpresso);
+        numImpressos++; //contador local
+        livroDAO.cadastrarLivroImpresso(livroImpresso);
+
+        LivroEletronico livroEletronico = new LivroEletronico(index, tamanho, titulo, autores, editora, precoEletronico);
+        livrosCadastrados.add((int) index++, livroEletronico);
+        numEletronicos++; //contador local
+        
+        //Inserir no banco de dados
+        livroDAO.cadastrarLivroEletronico(livroEletronico);
+
+        return livroImpresso;  // Retorno para exibicao de Caixa de texto
     }
-}
-
-
-   public Livro cadastroAmbos() {
-    String titulo = JOptionPane.showInputDialog("Título:");
-    String autores = JOptionPane.showInputDialog("Autores:");
-    String editora = JOptionPane.showInputDialog("Editora:");
-    float frete = Float.parseFloat(JOptionPane.showInputDialog("Frete:"));
-    int estoque = Integer.parseInt(JOptionPane.showInputDialog("Estoque:"));
-    float precoImpresso = Float.parseFloat(JOptionPane.showInputDialog("Preço do livro impresso:"));
-    float precoEletronico = Float.parseFloat(JOptionPane.showInputDialog("Preço do livro eletrônico:"));
-    int tamanho = Integer.parseInt(JOptionPane.showInputDialog("Tamanho do arquivo (KB):"));
-
-    LivroImpresso livroImpresso = new LivroImpresso(frete, estoque, titulo, autores, editora, precoImpresso);
-    livrosCadastrados.add(index++, livroImpresso);
-    numImpressos++;
-
-    LivroEletronico livroEletronico = new LivroEletronico(tamanho, titulo, autores, editora, precoEletronico);
-    livrosCadastrados.add(index++, livroEletronico);
-    numEletronicos++;
-
-    return livroImpresso;  // Ou retorne livroEletronico se preferir, ou altere a lógica para escolher qual livro retornar
-}
-
 
     public Livro cadastrarLivroImpresso() {
-    if (numImpressos == MAX_IMPRESSOS) {
-        JOptionPane.showMessageDialog(null, "Quantidade de livros impressos já está no máximo!");
-        return null;
+        if (numImpressos == MAX_IMPRESSOS) {
+            JOptionPane.showMessageDialog(null, "Quantidade de livros impressos já está no máximo!");
+            return null;
+        }
+
+        String titulo = JOptionPane.showInputDialog("Digite os dados do livro impresso:\nTítulo:");
+        String autores = JOptionPane.showInputDialog("Autores:");
+        String editora = JOptionPane.showInputDialog("Editora:");
+        float frete = Float.parseFloat(JOptionPane.showInputDialog("Frete:"));
+        int estoque = Integer.parseInt(JOptionPane.showInputDialog("Estoque:"));
+        float preco = Float.parseFloat(JOptionPane.showInputDialog("Preço:"));
+
+        LivroImpresso novoLivroImpresso = new LivroImpresso(index, frete, estoque, titulo, autores, editora, preco);
+        livrosCadastrados.add((int) index++, novoLivroImpresso);
+        numImpressos++; //contador local
+        
+        //Inserir no banco de dados
+        livroDAO.cadastrarLivroImpresso(novoLivroImpresso);
+        
+        return novoLivroImpresso; // Retorno para exibicao de Caixa de texto
     }
-
-    String titulo = JOptionPane.showInputDialog("Digite os dados do livro impresso:\nTítulo:");
-    String autores = JOptionPane.showInputDialog("Autores:");
-    String editora = JOptionPane.showInputDialog("Editora:");
-    float frete = Float.parseFloat(JOptionPane.showInputDialog("Frete:"));
-    int estoque = Integer.parseInt(JOptionPane.showInputDialog("Estoque:"));
-    float preco = Float.parseFloat(JOptionPane.showInputDialog("Preço:"));
-
-    LivroImpresso novoLivroImpresso = new LivroImpresso(frete, estoque, titulo, autores, editora, preco);
-    livrosCadastrados.add(index++, novoLivroImpresso);
-    numImpressos++;
-    return novoLivroImpresso;
-}
-
 
     public Livro cadastrarLivroEletronico() {
-    if (numEletronicos == MAX_ELETRONICOS) {
-        JOptionPane.showMessageDialog(null, "Quantidade de livros eletrônicos já está no máximo!");
-        return null;
+        if (numEletronicos == MAX_ELETRONICOS) {
+            JOptionPane.showMessageDialog(null, "Quantidade de livros eletrônicos já está no máximo!");
+            return null;
+        }
+
+        String titulo = JOptionPane.showInputDialog("Digite os dados do livro eletrônico:\nTítulo:");
+        String autores = JOptionPane.showInputDialog("Autores:");
+        String editora = JOptionPane.showInputDialog("Editora:");
+        int tamanho = Integer.parseInt(JOptionPane.showInputDialog("Tamanho do arquivo (KB):"));
+        float preco = Float.parseFloat(JOptionPane.showInputDialog("Preço:"));
+
+        LivroEletronico novoLivroEletronico = new LivroEletronico(index, tamanho, titulo, autores, editora, preco);
+        livrosCadastrados.add((int) index++, novoLivroEletronico);
+        numEletronicos++; //contador local
+        
+        //Inserir no banco de dados
+        livroDAO.cadastrarLivroEletronico(novoLivroEletronico);
+        
+        return novoLivroEletronico; // Retorno para exibicao de Caixa de texto
     }
 
-    String titulo = JOptionPane.showInputDialog("Digite os dados do livro eletrônico:\nTítulo:");
-    String autores = JOptionPane.showInputDialog("Autores:");
-    String editora = JOptionPane.showInputDialog("Editora:");
-    int tamanho = Integer.parseInt(JOptionPane.showInputDialog("Tamanho do arquivo (KB):"));
-    float preco = Float.parseFloat(JOptionPane.showInputDialog("Preço:"));
-
-    LivroEletronico novoLivroEletronico = new LivroEletronico(tamanho, titulo, autores, editora, preco);
-    livrosCadastrados.add(index++, novoLivroEletronico);
-    numEletronicos++;
-    return novoLivroEletronico;
-}
-
-
     public void realizarVenda() {
+        //Sair se variavel local chegou ao maximo
         if (numVendas >= MAX_VENDAS) {
             JOptionPane.showMessageDialog(null, "Limite de Vendas atingido!");
             return;
         }
-
-        String nomeCliente = JOptionPane.showInputDialog("Insira o nome do Cliente:");
-        int qntdLivrosVenda = Integer.parseInt(JOptionPane.showInputDialog("Quantos livros serão comprados?"));
-
-        Venda vendaAtual = new Venda(nomeCliente); // Nova instancia da venda atual
-
-        for (int i = 0; i < qntdLivrosVenda; i++) {
-        String[] tipos = {"Livro Impresso", "Livro Eletrônico"};
-        String tipoLivro = (String) JOptionPane.showInputDialog(null, "Qual o tipo do livro " + (i + 1) + "?",
-                "Tipo de Livro", JOptionPane.QUESTION_MESSAGE, null, tipos, tipos[0]);
-
-        if (tipoLivro == null) {
-            JOptionPane.showMessageDialog(null, "Operação cancelada.");
+        
+        //Sair se quantidade de vendas no banco de dados chegou ao maximo
+        if (vendaDAO.listarVendas().size() >= MAX_VENDAS) {
+            JOptionPane.showMessageDialog(null, "Limite de Vendas atingido!");
             return;
         }
 
-        Livro livroSelecionado = null;
+        int qtdLivrosImpressos = 0;
 
-        switch (tipoLivro) {
-            case "Livro Impresso":
-                // Cria uma lista de títulos de livros impressos disponíveis
-                ArrayList<String> titulosImpressos = new ArrayList<>();
-                for (Livro livro : livrosCadastrados) {
-                    if (livro instanceof LivroImpresso) {
-                        titulosImpressos.add(livro.getTitulo());
-                    }
-                }
+        String nomeCliente = JOptionPane.showInputDialog("Insira o nome do Cliente:");
+        int qntdLivrosVenda = Integer.parseInt(JOptionPane.showInputDialog("Quantos livros serão comprados?"));
+        
+        // Nova instancia da venda atual
+        Venda vendaAtual = new Venda(nomeCliente); 
 
-                // Mostra a lista de títulos para o usuário escolher
-                String livroImpressoEscolhido = (String) JOptionPane.showInputDialog(null, "Selecione o livro impresso:",
-                        "Escolher Livro", JOptionPane.QUESTION_MESSAGE, null, titulosImpressos.toArray(), titulosImpressos.get(0));
+        //Loop que vai até a quantidade maxima que o usuario inseriu
+        for (int i = 0; i < qntdLivrosVenda; i++) {
+            String[] tipos = {"Livro Impresso", "Livro Eletrônico"};
+            String tipoLivro = (String) JOptionPane.showInputDialog(null, "Qual o tipo do livro " + (i + 1) + "?",
+                    "Tipo de Livro", JOptionPane.QUESTION_MESSAGE, null, tipos, tipos[0]);
 
-                // Encontra o livro escolhido
-                for (Livro livro : livrosCadastrados) {
-                    if (livro instanceof LivroImpresso && livro.getTitulo().equals(livroImpressoEscolhido)) {
-                        livroSelecionado = livro;
-                        break;
-                    }
-                }
-                break;
-
-            case "Livro Eletrônico":
-                // Cria uma lista de títulos de livros eletrônicos disponíveis
-                ArrayList<String> titulosEletronicos = new ArrayList<>();
-                for (Livro livro : livrosCadastrados) {
-                    if (livro instanceof LivroEletronico) {
-                        titulosEletronicos.add(livro.getTitulo());
-                    }
-                }
-
-                // Mostra a lista de títulos para o usuário escolher
-                String livroEletronicoEscolhido = (String) JOptionPane.showInputDialog(null, "Selecione o livro eletrônico:",
-                        "Escolher Livro", JOptionPane.QUESTION_MESSAGE, null, titulosEletronicos.toArray(), titulosEletronicos.get(0));
-
-                // Encontra o livro escolhido
-                for (Livro livro : livrosCadastrados) {
-                    if (livro instanceof LivroEletronico && livro.getTitulo().equals(livroEletronicoEscolhido)) {
-                        livroSelecionado = livro;
-                        break;
-                    }
-                }
-                break;
-
-            default:
-                JOptionPane.showMessageDialog(null, "Opção inválida.");
+            if (tipoLivro == null) {
+                JOptionPane.showMessageDialog(null, "Operação cancelada.");
                 return;
-        }
+            }   
 
-        // Adiciona o livro selecionado à venda atual
-        if (livroSelecionado != null) {
-            vendaAtual.addLivro(livroSelecionado, i);
-        } else {
-            JOptionPane.showMessageDialog(null, "Nenhum livro foi selecionado.");
+            Livro livroSelecionado = null; //Para armazenar o livro escolhido
+
+            switch (tipoLivro) {
+                case "Livro Impresso":
+                    // Cria uma lista de títulos de livros impressos disponíveis
+                    List<Livro> titulosImpressos = livroDAO.listarLivros("impresso");
+
+                    // Mostra a lista de títulos para o usuário escolher
+                    LivroImpresso livroImpressoEscolhido = (LivroImpresso) JOptionPane.showInputDialog(null, "Selecione o livro impresso:",
+                            "Escolher Livro", JOptionPane.QUESTION_MESSAGE, null, titulosImpressos.toArray(), titulosImpressos.get(0));
+
+                    // Encontra o livro escolhido
+                    for (Livro livro : titulosImpressos) {
+                        if (livro.equals(livroImpressoEscolhido)) {
+                            livroSelecionado = livro;
+                            break;
+                        }
+                    }
+                    qtdLivrosImpressos++;
+                    break;
+                case "Livro Eletrônico":
+                    // Cria uma lista de títulos de livros eletrônicos disponíveis
+                    List<Livro> titulosEletronicos = livroDAO.listarLivros("eletronico");
+
+                    // Mostra a lista de títulos para o usuário escolher
+                    LivroEletronico livroEletronicoEscolhido = (LivroEletronico) JOptionPane.showInputDialog(null, "Selecione o livro eletrônico:",
+                            "Escolher Livro", JOptionPane.QUESTION_MESSAGE, null, titulosEletronicos.toArray(), titulosEletronicos.get(0));
+
+                    // Encontra o livro escolhido
+                    for (Livro livro : titulosEletronicos) {
+                        if (livro.equals(livroEletronicoEscolhido)) {
+                            livroSelecionado = livro;
+                            break;
+                        }
+                    }
+                    break;
+
+                default:
+                    JOptionPane.showMessageDialog(null, "Opção inválida.");
+                    return;
+            }
+
+            // Adiciona o livro selecionado ao Array da venda atual
+            if (livroSelecionado != null) {
+                vendaAtual.addLivro(livroSelecionado, i);
+            } else {
+                JOptionPane.showMessageDialog(null, "Nenhum livro foi selecionado.");
+            }
         }
-    }
 
         vendaAtual.listarLivros();
 
@@ -231,9 +246,26 @@ public class LivrariaVirtual {
 
         if (respostaConfirmarVenda == JOptionPane.YES_OPTION) {
             JOptionPane.showMessageDialog(null, "VENDA REALIZADA");
-            vendasRealizadas.add(numVendas, vendaAtual);
+            vendasRealizadas.add(vendaAtual);
+            
+            //Pegar o ultimo ID usado na tabela Venda e somar 1
+            long idVenda = vendaDAO.listarVendas().size() + 1;
+            vendaAtual.setNumero(idVenda);
+
+            //Adicionar venda ao Banco de dados
+            vendaDAO.adicionarVenda(vendaAtual);
+            
+            //Atualizar o estoque do banco de dados
+            for (Livro livroNoCarrinho : vendaAtual.getLivrosASeremVendidos()) {
+                //se for impresso
+                if (livroNoCarrinho instanceof LivroImpresso) {                    
+                    int novoEstoque = ((LivroImpresso) livroNoCarrinho).getEstoque() - 1;
+                    livroDAO.atualizarEstoqueLivro(livroNoCarrinho.getId(), novoEstoque);
+                }
+            }
+            
             this.numVendas++;
-            vendaAtual.setNumero(this.getNumVendas());
+            
         } else {
             vendaAtual.setValor(0);
             JOptionPane.showMessageDialog(null, "VENDA CANCELADA");
@@ -241,73 +273,108 @@ public class LivrariaVirtual {
     }
 
     public void listarLivrosImpressos() {
+        // Lista dos livros impressos no Banco de dados
+        List<Livro> livrosImpressosDisponiveis = livroDAO.listarLivros("impresso");
+
         StringBuilder livrosImpressoList = new StringBuilder();
-        for (int i = 0; i < livrosCadastrados.size(); i++) {
-            if (livrosCadastrados.get(i) instanceof LivroImpresso) {
-                livrosImpressoList.append("Livro [").append(i + 1).append("]\n")
-                        .append(livrosCadastrados.get(i)).append("\n\n");
+        for (int i = 0; i < livrosImpressosDisponiveis.size(); i++) {
+            if (livrosImpressosDisponiveis.get(i) instanceof LivroImpresso) {
+                livrosImpressoList.append(livrosImpressosDisponiveis.get(i)).append("\n");
             }
         }
-        JOptionPane.showMessageDialog(null, livrosImpressoList.toString());
+
+        // Criando uma JTextArea para exibir os livros impressos
+        JTextArea textArea = new JTextArea(livrosImpressoList.toString());
+        textArea.setEditable(false);
+        textArea.setLineWrap(true); 
+        textArea.setWrapStyleWord(true);
+
+        // Colocando a JTextArea dentro de um JScrollPane
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(1000, 300));
+
+        // Exibindo o JScrollPane em um JOptionPane
+        JOptionPane.showMessageDialog(null, scrollPane, "Livros Impressos Disponíveis", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void listarLivrosEletronicos() {
+        // Lista dos livros eletrônicos no Banco de dados
+        List<Livro> livrosEletronicosDisponiveis = livroDAO.listarLivros("eletronico");
+
         StringBuilder livrosEletronicoList = new StringBuilder();
-        for (int i = 0; i < livrosCadastrados.size(); i++) {
-            if (livrosCadastrados.get(i) instanceof LivroEletronico) {
-                livrosEletronicoList.append("Livro [").append(i + 1).append("]\n")
-                        .append(livrosCadastrados.get(i)).append("\n\n");
+        for (int i = 0; i < livrosEletronicosDisponiveis.size(); i++) {
+            if (livrosEletronicosDisponiveis.get(i) instanceof LivroEletronico) {
+                livrosEletronicoList.append(livrosEletronicosDisponiveis.get(i)).append("\n");
             }
         }
-        JOptionPane.showMessageDialog(null, livrosEletronicoList.toString());
+
+        // Criando uma JTextArea para exibir os livros eletrônicos
+        JTextArea textArea = new JTextArea(livrosEletronicoList.toString());
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+
+        // Colocando a JTextArea dentro de um JScrollPane
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(1000, 300));
+        // Exibindo o JScrollPane em um JOptionPane
+        JOptionPane.showMessageDialog(null, scrollPane, "Livros Eletrônicos Disponíveis", JOptionPane.INFORMATION_MESSAGE);
     }
 
-   public void listarLivros() {
-    String[] opcoes = {"Listar Livros Impressos", "Listar Livros Eletrônicos", "Listar Ambos", "Retornar ao Menu Principal"};
-    int respostaListarLivros = JOptionPane.showOptionDialog(null, "Escolha uma opção:", "Listar Livros",
-            JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+    public void listarAmbos() {
+        // Lista dos livros no Banco de dados
+        List<Livro> todosLivrosDisponiveis = livroDAO.listarTodosLivros();
 
-    StringBuilder mensagem = new StringBuilder();
+        StringBuilder livrosEletronicoList = new StringBuilder();
+        for (int i = 0; i < todosLivrosDisponiveis.size(); i++) {
+            livrosEletronicoList.append(todosLivrosDisponiveis.get(i)).append("\n");
+        }
 
-    switch (respostaListarLivros) {
-        case 0: // Listar Livros Impressos
-            for (int i = 0; i < livrosCadastrados.size(); i++) {
-                if (livrosCadastrados.get(i) instanceof LivroImpresso) {
-                    mensagem.append("Livro [").append(i + 1).append("]\n");
-                    mensagem.append(livrosCadastrados.get(i)).append("\n\n");
-                }
-            }
-            JOptionPane.showMessageDialog(null, mensagem.length() > 0 ? mensagem.toString() : "Nenhum livro impresso cadastrado.");
-            break;
-        case 1: // Listar Livros Eletrônicos
-            for (int i = 0; i < livrosCadastrados.size(); i++) {
-                if (livrosCadastrados.get(i) instanceof LivroEletronico) {
-                    mensagem.append("Livro [").append(i + 1).append("]\n");
-                    mensagem.append(livrosCadastrados.get(i)).append("\n\n");
-                }
-            }
-            JOptionPane.showMessageDialog(null, mensagem.length() > 0 ? mensagem.toString() : "Nenhum livro eletrônico cadastrado.");
-            break;
-        case 2: // Listar Ambos
-            for (Livro livro : livrosCadastrados) {
-                mensagem.append(livro).append("\n\n");
-            }
-            JOptionPane.showMessageDialog(null, mensagem.length() > 0 ? mensagem.toString() : "Nenhum livro cadastrado.");
-            break;
-        case 3: // Retornar ao Menu Principal
-            break;
-        default:
-            throw new AssertionError();
+        // Criando uma JTextArea para exibir os livros
+        JTextArea textArea = new JTextArea(livrosEletronicoList.toString());
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+
+        // Colocando a JTextArea dentro de um JScrollPane
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(1000, 300));
+
+        // Exibindo o JScrollPane em um JOptionPane
+        JOptionPane.showMessageDialog(null, scrollPane, "Livros Disponíveis", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void listarLivros() {
+        String[] opcoes = {"Listar Livros Impressos", "Listar Livros Eletrônicos", "Listar Ambos", "Retornar ao Menu Principal"};
+        int respostaListarLivros = JOptionPane.showOptionDialog(null, "Escolha uma opção:", "Listar Livros",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoes, opcoes[0]);
+
+        switch (respostaListarLivros) {
+            case 0: // Listar Livros Impressos
+                this.listarLivrosImpressos();
+                break;
+            case 1: // Listar Livros Eletrônicos
+                this.listarLivrosEletronicos();
+                break;
+            case 2: // Listar Ambos
+                this.listarAmbos();
+                break;
+            case 3: // Retornar ao Menu Principal
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
+
+    public void listarVendas() {
+        //Lista de vendas do Banco de Dados
+        List<Venda> listaDeVendasBancoDeDados = vendaDAO.listarVendas();
+
+        StringBuilder mensagem = new StringBuilder();
+        for (int i = 0; i < listaDeVendasBancoDeDados.size(); i++) {            
+            mensagem.append(listaDeVendasBancoDeDados.get(i)).append("\n");
+        }
+        
+        JOptionPane.showMessageDialog(null, mensagem.length() > 0 ? mensagem.toString() : "Nenhuma venda realizada.");
     }
 }
-
-public void listarVendas() {
-    StringBuilder mensagem = new StringBuilder();
-    for (int i = 0; i < vendasRealizadas.size(); i++) {
-        mensagem.append("Venda ").append(vendasRealizadas.get(i).getNumero()).append("\n");
-        mensagem.append(vendasRealizadas.get(i)).append("\n\n");
-    }
-    JOptionPane.showMessageDialog(null, mensagem.length() > 0 ? mensagem.toString() : "Nenhuma venda realizada.");
-}
-}
-

@@ -5,6 +5,7 @@ package solutis.livrariavirtual_solutis;
 public abstract class Livro {
 
     //Atributos
+    protected long id;
     protected String titulo;
     protected String autores;
     protected String editora;
@@ -22,6 +23,15 @@ public abstract class Livro {
     }
     
     //Getter e Setters
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+    
 
     public String getTitulo() {
         return titulo;

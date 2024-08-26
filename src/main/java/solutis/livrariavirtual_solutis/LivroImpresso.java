@@ -7,10 +7,11 @@ public class LivroImpresso extends Livro {
     protected int estoque;
 
     //Construtores
-    public LivroImpresso(float frete, int estoque, String titulo, String autores, String editora, float preco) {
+    public LivroImpresso(long id,float frete, int estoque, String titulo, String autores, String editora, float preco) {
         super(titulo, autores, editora, preco);
         this.frete = frete;
         this.estoque = estoque;
+        this.id = id;
     }
 
     public LivroImpresso() {
@@ -34,15 +35,15 @@ public class LivroImpresso extends Livro {
     }
 
     //Métodos
-    public void atualizarEstoque() {
-
+    public void atualizarEstoque(int qtdLivros) {
+        this.estoque -= qtdLivros;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Titulo: %-20s Autores: %-20s Editora: %-20s Preço: %-10.2f ", 
-            getTitulo(), getAutores(), getEditora(), getPreco()));
+        sb.append(String.format("Id: %-5s Titulo: %-35s Autores: %-25s Editora: %-30s Preço: %-10.2f Estoque: %-5s", getId(),
+            getTitulo(), getAutores(), getEditora(), getPreco(), getEstoque()));
         return sb.toString();
     }
 

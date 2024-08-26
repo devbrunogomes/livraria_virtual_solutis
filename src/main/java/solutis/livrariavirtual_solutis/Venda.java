@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Venda {
 
-    ArrayList<Livro> livrosASeremVendidos = new ArrayList<>();
+    private ArrayList<Livro> livrosASeremVendidos = new ArrayList<>();
 
     //Atributos
     private static int numVendas;
-    private int numero;
+    private long numero;
     private String cliente;
     private float valor;
 
@@ -22,6 +22,16 @@ public class Venda {
     }
 
     //Getters e Setters
+
+    public ArrayList<Livro> getLivrosASeremVendidos() {
+        return livrosASeremVendidos;
+    }
+
+    public void setLivrosASeremVendidos(ArrayList<Livro> livrosASeremVendidos) {
+        this.livrosASeremVendidos = livrosASeremVendidos;
+    }
+    
+    
     public int getNumVendas() {
         return numVendas;
     }
@@ -30,11 +40,11 @@ public class Venda {
         this.numVendas = numVendas;
     }
 
-    public int getNumero() {
+    public long getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(long numero) {
         this.numero = numero;
     }
 
@@ -55,26 +65,29 @@ public class Venda {
     }
 
     //Metodos
-    public void addLivro(Livro livro, int index) {
+    public void addLivro(Livro livro, long index) {
+        float valorAoTotal = 0;
+        
         System.out.println("Adicionando livro ao carrinho");
-        livrosASeremVendidos.add(index,livro);
+        livrosASeremVendidos.add(livro);
+        
+        if (livro instanceof LivroImpresso) {
+            valorAoTotal += livro.getPreco() + ((LivroImpresso) livro).getFrete();
+        } else{
+            valorAoTotal += livro.getPreco();
+        }
+        
+        setValor(valorAoTotal + getValor());
     }
 
     public void listarLivros() {
-        float valorTotal = 0;
-
         System.out.println("\n-- Livros no Carrinho --");
 
         //Loop For
         for (Livro livroASerVendido : livrosASeremVendidos) {
             System.out.println("Titulo - " + livroASerVendido.titulo);
             System.out.println("Preco - " + livroASerVendido.getPreco());
-
-            
-            valorTotal += livroASerVendido.getPreco();
         }
-
-        setValor(valorTotal);
     }
     
     @Override

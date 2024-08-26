@@ -1,23 +1,35 @@
 package solutis.livrariavirtual_solutis;
 
+import java.sql.Connection;
 import javax.swing.JOptionPane;
+import solutis.livrariavirtual_solutis.model.DAO;
+import solutis.livrariavirtual_solutis.model.LivroDAO;
+import solutis.livrariavirtual_solutis.model.VendaDAO;
 
 /**
- * Estrutura das classes
- *
- * Atributos Construtor Getters e Setters Métodos Overrides
- *
+ * GET STARTED
+ * 
+ * 1 - Execute as querys em querysSQL.sql
+ * 2 - Execute as querys em livrosSQL.sql
+ * 3 - Vá ao arquivo DAO.java e verifique as informacoes de porta, user e senha
+ * 4 - Após isso, execute o programa e faça os testes*
  */
 
-/** TO DO
-* Em cadastro de Livro, atualizar o estoque
-* Sobreescrever metodos toString das classes
-*/
 public class Application {
 
     public static void main(String[] args) {
+        DAO dao = new DAO();
+        Connection connection = dao.conectar();
+        
+        if (connection == null) {
+            System.out.println("Não foi possível conectar ao banco de dados.");
+            return;
+        }
+        
+        VendaDAO vendaDAO = new VendaDAO(connection);
+        LivroDAO livroDAO = new LivroDAO(connection);
 
-        LivrariaVirtual livrariaTeste = new LivrariaVirtual();
+        LivrariaVirtual livrariaTeste = new LivrariaVirtual(vendaDAO, livroDAO);
 
         String[] opcoes = {"Cadastrar livro", "Realizar uma venda", "Listar livros", "Listar vendas", "Sair"};
         int escolhaUsuario;

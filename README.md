@@ -58,7 +58,9 @@ a niveis onde nunca tinha usado antes, além de Banco de Dados Relacional, Git, 
 
 ### 3 - Fábio Macedo
 
+Este foi um excelente desafio para por em prática não só o que aprendemos mas para absorver novos conteúdos, sempre aprendendo e ensinado com todos, essa magia do trabalho em equipe é sempre ímpar.
 
+Pude desenvolver melhor a minha lógica de programação, trabalhando, em específico neste projeto, com a parte da lógica das funções, o que nos trouxe grande interação, me senti desafiado a não parar, e sempre buscar o melhor que possa ser feito.
 
 ---
 
